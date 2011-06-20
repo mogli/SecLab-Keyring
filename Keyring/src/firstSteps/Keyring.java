@@ -55,11 +55,7 @@ public class Keyring {//extends HashMap<String, KeyPair>{
 
 
 	public static void main(String[] args) {
-		Security.addProvider(new BouncyCastleProvider());
 		try {
-			Cipher c = Cipher.getInstance("DES/CBC/PKCS5Padding");
-			
-			System.out.println(c.toString());
 			
 			java.security.KeyPairGenerator generator =  KeyPairGenerator.getInstance("RSA");
 			generator.initialize(4096);
