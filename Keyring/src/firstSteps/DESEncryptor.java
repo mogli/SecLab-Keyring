@@ -45,9 +45,13 @@ public enum DESEncryptor {
 			KeyFactory kf = KeyFactory.getInstance("RSA");
 			
 
-			SecretKey c = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(password.getBytes()));
-			Cipher ecipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-			ecipher.init(Cipher.DECRYPT_MODE, c, paramSpec);
+//			SecretKey c = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(password.getBytes()));
+			
+			
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+	        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
+			Cipher ecipher = Cipher.getInstance("PBEWithMD5AndDES");
+			ecipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(SALT, 20));
 			PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(ecipher.doFinal(ecipher.doFinal(private1)));
 
 			result = kf.generatePrivate(ks);

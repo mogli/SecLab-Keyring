@@ -20,7 +20,7 @@ public class KeyRingTest {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			java.security.KeyPairGenerator generator =  KeyPairGenerator.getInstance("RSA");
-			generator.initialize(4096);
+			generator.initialize(512);
 			KeyPair originalPair = generator.genKeyPair();
 			Keyring k = new Keyring();
 			k.put("martin", originalPair, "hallo");
