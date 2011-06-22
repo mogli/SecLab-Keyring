@@ -19,16 +19,17 @@ public enum DESEncryptor {
         (byte) 0xde, (byte) 0x33, (byte) 0x10, (byte) 0x12,
         (byte) 0xde, (byte) 0x33, (byte) 0x10, (byte) 0x12,
     };
-
+	private final String encodingAlgo = "DES/CBC/PKCS5Padding";
 	public byte[] encryptKey(PrivateKey private1, String password) {
 //		AlgorithmParameterSpec paramSpec = new IvParameterSpec(Variables.INSTANCE.iv);
 		byte [] result = null;
+		
 		try {
-	        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+	        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(encodingAlgo);
 	        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
 	        
 			//SecretKey c = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(password.getBytes()));
-			Cipher ecipher = Cipher.getInstance("PBEWithMD5AndDES");
+			Cipher ecipher = Cipher.getInstance(encodingAlgo);
 			ecipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(SALT, 20));
 			result = ecipher.doFinal(private1.getEncoded());
 		} catch (Exception e) {
@@ -48,9 +49,9 @@ public enum DESEncryptor {
 //			SecretKey c = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(password.getBytes()));
 			
 			
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(encodingAlgo);
 	        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
-			Cipher ecipher = Cipher.getInstance("PBEWithMD5AndDES");
+			Cipher ecipher = Cipher.getInstance(encodingAlgo);
 			ecipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(SALT, 20));
 			PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(ecipher.doFinal(ecipher.doFinal(private1)));
 
