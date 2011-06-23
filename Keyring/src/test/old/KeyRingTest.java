@@ -17,7 +17,7 @@ public class KeyRingTest {
 		try {
 			Keyring k = new Keyring();
 			KeyPair originalPair = k.create("martin", "hallo");
-			KeyPair readPair = k.get("martin", "hallo");
+			KeyPair readPair = k.create("martin", "hallo");
 			
 			System.out.println(originalPair.getPrivate().toString());
 			System.out.println(readPair.getPrivate().toString());
