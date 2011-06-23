@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 public class Keyring {//extends HashMap<String, KeyPair>{
@@ -38,13 +38,13 @@ public class Keyring {//extends HashMap<String, KeyPair>{
 			pubStream.write(pubKey);
 			pubStream.close();
 
-			byte[] encryptedPrivateKey = DESEncryptor.INSTANCE.encryptKey(keypair.getPrivate(), password);
+			DesUtil desCoder = new DesUtil(password);
+			
+			byte[] encryptedPrivateKey = desCoder.encrypt(keypair.getPrivate().getEncoded());
 			FileOutputStream privStream = new FileOutputStream(Variables.INSTANCE.keyFolder+"/"+user+".priv");
 			privStream.write(encryptedPrivateKey);
 			privStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -65,22 +65,27 @@ public class Keyring {//extends HashMap<String, KeyPair>{
 		}
 		return key;
 	}
-	private KeyPair loadKeyToRing(String user, String password) {
-		byte[] pubKeyArr = readFileToByte(Variables.INSTANCE.keyFolder+"/"+user+".pub");
-		PrivateKey privKey = DESEncryptor.INSTANCE.decryptKey(readFileToByte(Variables.INSTANCE.keyFolder+"/"+user+".priv"),password);
-		KeyPair bla = null;
-		try {
+	private Key getKeyFromArray(byte[] arr, boolean priv) throws Exception{
 			KeyFactory kf = KeyFactory.getInstance("RSA");
-
-			PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(pubKeyArr);
-
-			bla = new KeyPair(kf.generatePublic(ks), privKey);
-		} catch (InvalidKeySpecException e) {
+			if(priv) 
+				return kf.generatePrivate(new PKCS8EncodedKeySpec(arr));
+			else
+				return kf.generatePublic(new X509EncodedKeySpec(arr));
+	}
+	private KeyPair loadKeyToRing(String user, String password) {
+		KeyPair keyPair = null;
+		try{
+			DesUtil desCoder = new DesUtil(password);
+			byte[] pubKeyArr = readFileToByte(Variables.INSTANCE.keyFolder+"/"+user+".pub");
+			byte[] privKeyArr = desCoder.decrypt(readFileToByte(Variables.INSTANCE.keyFolder+"/"+user+".priv"));
+			//PrivateKey privKey = DESEncryptor.INSTANCE.decryptKey(readFileToByte(Variables.INSTANCE.keyFolder+"/"+user+".priv"),password);
+			//			KeyFactory kf = KeyFactory.getInstance("RSA");
+			//			 PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(pubKeyArr);
+			keyPair = new KeyPair((PublicKey) getKeyFromArray(pubKeyArr,false), (PrivateKey) getKeyFromArray(privKeyArr, true));
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
 		}
-		return bla;
+		return keyPair;
 	}
 
 
