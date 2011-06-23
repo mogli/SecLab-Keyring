@@ -25,11 +25,11 @@ public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
 	@Override
 	public KeyPair create(String user, String password) {
 		KeyPair keypair = null;
-		if(this.keyPairExists(user))
+		if(this.keyPairExists(user))		// Is User-Key already existing?
 			return this.get(user, password);
-		else
+		else								// Generate new pair
 		try {
-			keypair = Utils.INSTANCE.generateKeyPair("RSA", 2048);
+			keypair = Utils.INSTANCE.generateKeyPair(Utils.INSTANCE.encAlgo, Utils.INSTANCE.keySize);
 			FileOutputStream pubStream = new FileOutputStream(Utils.INSTANCE.keyFolder+"/"+user+".pub");
 			byte[] pubKey = keypair.getPublic().getEncoded();
 			pubStream.write(pubKey);
@@ -53,7 +53,7 @@ public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
 	public String encrypt(String user, String filename, String message) {
 		try {
 			PublicKey key = this.getPublicKey(user);
-			Cipher eCipher = Cipher.getInstance("RSA");
+			Cipher eCipher = Cipher.getInstance(Utils.INSTANCE.encAlgo);
 			eCipher.init(Cipher.ENCRYPT_MODE, key);
 			byte[] enc = Base64.encode(eCipher.doFinal(message.getBytes()));
 			this.writeByteToFile(filename, enc);
@@ -73,7 +73,7 @@ public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
 	public String decrypt(String user, String filename, String password) {
 		try {
 			PrivateKey key = this.getPrivateKey(user,password);
-			Cipher dCipher = Cipher.getInstance("RSA");
+			Cipher dCipher = Cipher.getInstance(Utils.INSTANCE.encAlgo);
 			dCipher.init(Cipher.DECRYPT_MODE, key);
 			byte[] dec = dCipher.doFinal(Base64.decode(this.readFileToByte(filename)));
 			return new String(dec);
@@ -110,7 +110,7 @@ public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
 		return key;
 	}
 	private Key getKeyFromArray(byte[] arr, boolean priv) throws Exception{
-		KeyFactory kf = KeyFactory.getInstance("RSA");
+		KeyFactory kf = KeyFactory.getInstance(Utils.INSTANCE.encAlgo);
 		if(priv) 
 			return kf.generatePrivate(new PKCS8EncodedKeySpec(arr));
 		else
