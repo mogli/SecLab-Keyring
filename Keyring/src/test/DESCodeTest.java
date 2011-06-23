@@ -1,9 +1,10 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import org.group02.DesUtil;
 import org.junit.Test;
 
-import firstSteps.DesUtil;
 
 public class DESCodeTest {
 	@Test

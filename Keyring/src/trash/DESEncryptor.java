@@ -13,7 +13,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import firstSteps.Variables;
+import org.group02.Utils;
+
 
 public enum DESEncryptor {
 	INSTANCE;
@@ -23,7 +24,7 @@ public enum DESEncryptor {
     };
 	private final String encodingAlgo = "DES/CBC/PKCS5Padding";
 	public byte[] encryptKey(PrivateKey private1, String password) {
-		AlgorithmParameterSpec paramSpec = new IvParameterSpec(Variables.INSTANCE.iv);
+		AlgorithmParameterSpec paramSpec = new IvParameterSpec(Utils.INSTANCE.iv);
 		byte [] result = null;
 		
 		try {
@@ -40,16 +41,10 @@ public enum DESEncryptor {
 	}
 
 	public PrivateKey decryptKey(byte[] private1, String password) {
-		AlgorithmParameterSpec paramSpec = new IvParameterSpec(Variables.INSTANCE.iv);
 		PrivateKey result = null;
 		try {
 
 			KeyFactory kf = KeyFactory.getInstance("RSA");
-			
-
-//			SecretKey c = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(password.getBytes()));
-			
-			
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(encodingAlgo);
 	        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
 			Cipher ecipher = Cipher.getInstance(encodingAlgo);

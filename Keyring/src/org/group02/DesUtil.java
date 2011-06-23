@@ -1,4 +1,4 @@
-package firstSteps;
+package org.group02;
 
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.KeySpec;
