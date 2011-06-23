@@ -7,6 +7,9 @@ import org.junit.Test;
 
 
 public class KeyringEncryptionTest {
+	private void d(String s){
+		System.out.println(s);
+	}
 	@Test
 	public void testClass(){
 		IKeyring k = new Keyring();
@@ -14,14 +17,15 @@ public class KeyringEncryptionTest {
 		String user = "willi", password="willis passwort",
 			myMessage = "Lorem ipsum.....pp.Alles super geheim heute hier...",
 			file = "myFile.txt";
-		
+		System.out.printf("Starting test with user '%s', password '%s' and message '%s'. The output is written into file '%s'.\n\n", user, password, myMessage, file);
 		k.create(user, password);
-		System.out.println("Encrypted message: ");
-		System.out.println(k.encrypt(user, file, myMessage));
+		d("Encrypted message: ");
+		d(k.encrypt(user, file, myMessage));
 		
-		System.out.println();System.out.println("Decrypted message:");
+		d("");
+		d("Decrypted message:");
 		String result = k.decrypt(user, file, password);
-		System.out.println(result);
+		d(result);
 		Assert.assertEquals(myMessage, result);
 		
 	}
