@@ -22,7 +22,7 @@ public class DesUtil {
 		int iterationCount = 2;
 		KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt,
 				iterationCount);
-		SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES")
+		SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndTripleDES")
 				.generateSecret(keySpec);
 		ecipher = Cipher.getInstance(key.getAlgorithm());
 		dcipher = Cipher.getInstance(key.getAlgorithm());
