@@ -23,14 +23,10 @@ public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
 			else								// Generate new pair
 			{
 				keypair = Utils.INSTANCE.generateKeyPair(Utils.INSTANCE.encAlgo, Utils.INSTANCE.keySize);
-				FileOutputStream pubStream = new FileOutputStream(Utils.INSTANCE.keyFolder+"/"+user+".pub");
-				pubStream.write(keypair.getPublic().getEncoded());
-				pubStream.close();
+				Utils.INSTANCE.writeByteToFile(Utils.INSTANCE.keyFolder+"/"+user+".pub", keypair.getPublic().getEncoded());
 
 				byte[] encryptedPrivateKey = new DesUtil(password).encrypt(keypair.getPrivate().getEncoded());
-				FileOutputStream privStream = new FileOutputStream(Utils.INSTANCE.keyFolder+"/"+user+".priv");
-				privStream.write(encryptedPrivateKey);
-				privStream.close();
+				Utils.INSTANCE.writeByteToFile(Utils.INSTANCE.keyFolder+"/"+user+".priv", encryptedPrivateKey);
 				return keypair;
 			} 
 		}catch (Exception e) {
