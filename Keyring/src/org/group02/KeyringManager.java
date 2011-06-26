@@ -86,13 +86,11 @@ public class KeyringManager implements IKeyring{
 			return false;
 	}
 	private PublicKey getPublicKey(String user) throws Exception{
-		byte[] pubKeyArr = Utils.INSTANCE.readFileToByte(Utils.INSTANCE.keyFolder+"/"+user+".pub");
-		return (PublicKey) getKeyFromArray(pubKeyArr,false);
+		return (PublicKey) getKeyFromArray(Utils.INSTANCE.readFileToByte(Utils.INSTANCE.keyFolder+"/"+user+".pub"),false);
 	}
 	private PrivateKey getPrivateKey(String user, String password) throws Exception{
 		DesUtil desCoder = new DesUtil(password);
-		byte[] privKeyArr = Utils.INSTANCE.readFileToByte(Utils.INSTANCE.keyFolder+"/"+user+".priv");
-		return (PrivateKey) getKeyFromArray(desCoder.decrypt(privKeyArr), true);
+		return (PrivateKey) getKeyFromArray(desCoder.decrypt(Utils.INSTANCE.readFileToByte(Utils.INSTANCE.keyFolder+"/"+user+".priv")), true);
 	}
 	private Key getKeyFromArray(byte[] arr, boolean priv) throws Exception{
 		KeyFactory kf = KeyFactory.getInstance(Utils.INSTANCE.encAlgo);
