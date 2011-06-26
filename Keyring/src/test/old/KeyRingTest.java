@@ -6,7 +6,7 @@ import java.security.KeyPair;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.group02.Keyring;
+import org.group02.KeyringManager;
 import org.junit.Test;
 
 
@@ -15,7 +15,7 @@ public class KeyRingTest {
 	public void testKeyCreation() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
-			Keyring k = new Keyring();
+			KeyringManager k = new KeyringManager();
 			KeyPair originalPair = k.create("martin", "hallo");
 			KeyPair readPair = k.create("martin", "hallo");
 			
