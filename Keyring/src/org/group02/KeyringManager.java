@@ -13,6 +13,22 @@ import javax.crypto.Cipher;
 
 import org.bouncycastle.util.encoders.Base64;
 public class KeyringManager implements IKeyring{
+	
+	public KeyringManager(){
+		createKeyringDirectoryIfnotExistent();
+	}
+
+	private void createKeyringDirectoryIfnotExistent() {
+		File keyringDirectory = new File(Utils.INSTANCE.keyFolder);
+		if(!keyringDirectory.exists()){
+			if(keyringDirectory.mkdir()){
+				System.out.println("Keyring directory created!");
+			}else{
+				System.out.println("Could not create keyring directory!");
+			}
+		}
+	}
+	
 	@Override
 	public KeyPair create(String user, String password) {
 		KeyPair keypair = null;

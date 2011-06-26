@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: lib/bcprov-jdk16-146.jar
+Main-Class: org.group02.Keyring
