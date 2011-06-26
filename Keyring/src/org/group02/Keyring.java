@@ -1,7 +1,6 @@
 package org.group02;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -13,7 +12,7 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 
 import org.bouncycastle.util.encoders.Base64;
-public class Keyring implements IKeyring{//extends HashMap<String, KeyPair>{
+public class Keyring implements IKeyring{
 	@Override
 	public KeyPair create(String user, String password) {
 		KeyPair keypair = null;
