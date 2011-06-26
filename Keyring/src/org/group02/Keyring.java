@@ -11,22 +11,21 @@ public class Keyring {
 		IKeyring keyRing = new KeyringManager();
 
 		if (args.length == 0) {
-			System.out.println("No arguments supplied. Please use \"keyring help\" for usage information.");
+			System.out.println("No arguments supplied.");
+			printUsage();
 		} else {
-			if (args[0].equals("help")) {
-				printUsage();
-			} else if (args[0].equals("create") && args.length == 3) {
+			if (args[0].equals("create") && args.length == 3) {
 				String user = args[1];
 				String password = args[2];
 				KeyPair keyPair = keyRing.create(user, password);
-				if(keyPair != null){
-					System.out.println("Key pair created for user "+user+"!");
+				if (keyPair != null) {
+					System.out.println("Key pair created for user " + user + "!");
 				}
 			} else if (args[0].equals("encrypt") && args.length == 4) {
 				String user = args[1];
 				String filename = args[2];
 				String message = args[3];
-				System.out.println("Original message: "+message);
+				System.out.println("Original message: " + message);
 				System.out.println("Encrypted message: " + keyRing.encrypt(user, filename, message));
 			} else if (args[0].equals("decrypt") && args.length == 4) {
 				String user = args[1];
