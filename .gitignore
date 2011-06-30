@@ -1,3 +1,5 @@
 bin/
 Keyring/keypairs/*
 trash/*
+
+Keyring/test.txt
