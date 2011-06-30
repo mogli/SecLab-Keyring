@@ -3,10 +3,6 @@ package org.group02;
 import java.security.KeyPair;
 
 public class Keyring {
-
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		IKeyring keyRing = new KeyringManager();
 
